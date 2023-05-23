@@ -1,0 +1,62 @@
+﻿@page
+@model TrainSchedule.Pages.Stages.DetailsModel
+
+@{
+    Layout = "/Pages/Admin/_Layout.cshtml";
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Stage</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Stage.Sequence)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Stage.Sequence)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Stage.DepartureStation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Stage.DepartureStation)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Stage.ArrivalStation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Stage.ArrivalStation)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Stage.DepartureDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Stage.DepartureDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Stage.ArrivalDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Stage.ArrivalDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Stage.Distance)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Stage.Distance)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Stage.Connection)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Stage.Connection.ConnectionID)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Stage.StageID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

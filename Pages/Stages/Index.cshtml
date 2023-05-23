@@ -1,0 +1,156 @@
+﻿@page
+@using TrainSchedule.Services
+@inject CommonLocalizationService localizer
+@model TrainSchedule.Pages.Stages.IndexModel
+
+@{
+    Layout = "/Pages/Admin/_Layout.cshtml";
+    ViewData["Title"] = "Stages";
+}
+
+<h1>@localizer.Get("Stages")</h1>
+
+<p>
+    <a asp-page="Create">@localizer.Get("Create a new stage")</a>
+</p>
+
+<p>
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseFilters" role="button">
+        @localizer.Get("Filters")
+        <i class="bi bi-arrow-down-square"></i>
+    </a>
+</p>
+
+<div class="collapse" id="collapseFilters">
+    <div class="card card-body">
+        <form asp-page="./Index" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    <input type="hidden" name="handler" value="Id" />
+                    <input type="text" name="Id" value="@Model.FilterId" />
+                    <input type="submit" value="@localizer.Get("Find by Id")" class="btn btn-primary" />
+                </p>
+            </div>
+        </form>
+        <form asp-page="./Index" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    <input type="hidden" name="handler" value="Connection" />
+                    <input type="text" name="Connection" value="@Model.FilterConnection" />
+                    <input type="submit" value="@localizer.Get("Find by connection Id")" class="btn btn-primary" />
+                </p>
+            </div>
+        </form>
+        <form asp-page="./Index" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    <input type="hidden" name="handler" value="Departure" />
+                    <input type="text" name="Departure" value="@Model.FilterDeparture" />
+                    <input type="submit" value="@localizer.Get("Find by departure station")" class="btn btn-primary" />
+                </p>
+            </div>
+        </form>
+        <form asp-page="./Index" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    <input type="hidden" name="handler" value="Arrival" />
+                    <input type="text" name="Arrival" value="@Model.FilterArrival" />
+                    <input type="submit" value="@localizer.Get("Find by arrival station")" class="btn btn-primary" />
+                </p>
+            </div>
+        </form>
+        <form asp-page="./Index" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    <input type="hidden" name="handler" value="Date" />
+                    <input type="date" name="Date" value="@Model.FilterDate.Date" />
+                    <input type="submit" value="@localizer.Get("Find by date")" class="btn btn-primary" />
+                </p>
+            </div>
+        </form>
+        <a asp-page="./Index">@localizer.Get("Disable filters")</a>
+    </div>
+</div>
+
+<table class="table justify-content-center" style="text-align: center">
+    <thead>
+        <tr>
+            <th style="width: 5%">
+                @Html.DisplayNameFor(model => model.Stages[0].StageID)
+            </th>
+            <th style="width: 13%">
+                @Html.DisplayNameFor(model => model.Stages[0].ConnectionID)
+            </th>
+            <th style="width: 5%">
+                @Html.DisplayNameFor(model => model.Stages[0].Sequence)
+            </th>
+            <th style="width: 14%">
+                @Html.DisplayNameFor(model => model.Stages[0].DepartureStation)
+            </th>
+            <th style="width: 14%">
+                @Html.DisplayNameFor(model => model.Stages[0].ArrivalStation)
+            </th>
+            <th style="width: 15%">
+                @Html.DisplayNameFor(model => model.Stages[0].DepartureDate)
+            </th>
+            <th style="width: 15%">
+                @Html.DisplayNameFor(model => model.Stages[0].ArrivalDate)
+            </th>
+            <th style="width: 4%">
+                @Html.DisplayNameFor(model => model.Stages[0].Distance)
+            </th>
+            <th style="width: 15%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Stages)
+        {
+            <tr>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.StageID)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.ConnectionID)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Sequence)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.DepartureStation)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.ArrivalStation)
+                </td>
+                <td class="align-middle">
+                    @item.DepartureDate.ToString("g")
+                </td>
+                <td class="align-middle">
+                    @item.ArrivalDate.ToString("g")
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Distance)
+                </td>
+                <td class="align-middle">
+                    <a asp-page="./Edit" asp-route-id="@item.StageID">@localizer.Get("Edit")</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.StageID">@localizer.Get("Delete")</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.Stages.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Stages.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-pageIndex="@(Model.Stages.PageIndex - 1)"
+   class="btn btn-primary @prevDisabled">
+    @localizer.Get("Previous")
+</a>
+<a asp-page="./Index"
+   asp-route-pageIndex="@(Model.Stages.PageIndex + 1)"
+   class="btn btn-primary @nextDisabled">
+    @localizer.Get("Next")
+</a>

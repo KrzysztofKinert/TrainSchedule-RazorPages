@@ -1,0 +1,128 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Result
+@using TrainSchedule.Services
+@inject CommonLocalizationService localizer
+
+<div class="container-fluid">
+    <div class="row justify-content-xl-center">
+        <div class="col-3">
+            <h5>@localizer.Get("Connection Details")</h5>
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th style="width: 30%">@localizer.Get("Name")</th>
+                        <td style="text-align: end">@Model.Name</td>
+                    </tr>
+                    <tr>
+                        <th>@localizer.Get("Type")</th>
+                        <td style="text-align: end">
+                            @{
+                                var typeString = "";
+                                if(Model.Type == "E") typeString = "Express";
+                                else if (Model.Type == "I") typeString = "Intercity";
+                                else typeString = "Regional";
+                                @localizer.Get(typeString);
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@localizer.Get("Departure")</th>
+                        <td style="text-align: end">@Model.Stages[0].DepartureDate.ToString("g")</td>
+                    </tr>
+                    <tr>
+                        <th>@localizer.Get("Arrival")</th>
+                        <td style="text-align: end">@Model.Stages[0].ArrivalDate.ToString("g")</td>
+                    </tr>
+                    <tr>
+                        <th>@localizer.Get("Time")</th>
+                        <td style="text-align: end">
+                            @{
+                                var timeTotal = Model.Stages[Model.Stages.Count() - 1].ArrivalDate.Subtract(Model.Stages[0].DepartureDate);
+                                @String.Format("{0:hh\\:mm}", timeTotal);
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@localizer.Get("Distance")</th>
+                        <td style="text-align: end">
+                            @{
+                                var distanceTotal = 0.0;
+                                foreach (Stage stage in Model.Stages) distanceTotal += stage.Distance;
+                                var distanceString = distanceTotal.ToString() + " km";
+                                @distanceString;
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@localizer.Get("WiFi")</th>
+                        <td style="text-align: end">
+                            @{
+                                var wifi = "";
+                                if (Model.IsWiFi) wifi = localizer.Get("Yes");
+                                else wifi = localizer.Get("No");
+                                @wifi
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@localizer.Get("Bicycle carriage")</th>
+                        <td class="align-middle" style="text-align: end">
+                            @{
+                                var bicycle = "";
+                                if (Model.IsWiFi) bicycle = localizer.Get("Yes");
+                                else bicycle = localizer.Get("No");
+                                @bicycle
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-9">
+            <h5>@localizer.Get("Intermediate Stations")</h5>
+            <table class="table table-striped" style="text-align: center">
+                <tr>
+                    <th class="text-center" style="width: 15%">@localizer.Get("From")</th>
+                    <th class="text-center" style="width: fit-content()">@localizer.Get("Departure")</th>
+                    <th class="text-center" style="width: 15%">@localizer.Get("To")</th>
+                    <th class="text-center" style="width: fit-content()">@localizer.Get("Arrival")</th>
+                    <th class="text-center" style="width: fit-content()">@localizer.Get("Time")</th>
+                    <th class="text-center" style="width: fit-content()">@localizer.Get("Distance")</th>
+                </tr>
+                @foreach (var item in Model.Stages)
+                {
+                <tr>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.DepartureStation)
+                    </td>
+                    <td class="align-middle">
+                        @item.DepartureDate.ToString("g")
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.ArrivalStation)
+                    </td>
+                    <td class="align-middle">
+                        @item.ArrivalDate.ToString("g")
+                    </td>
+                    <td class="align-middle">
+                        @{
+                                var time = item.ArrivalDate.Subtract(item.DepartureDate);
+                            @String.Format("{0:hh\\:mm}", time);
+                        }
+                    </td>
+                    <td class="align-middle">
+                        @{
+                                var distance = item.Distance.ToString() + " km";
+                            @distance;
+                        }
+                    </td>
+                </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

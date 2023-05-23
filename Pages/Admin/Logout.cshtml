@@ -1,0 +1,13 @@
+﻿@page
+@model TrainSchedule.Pages.Admin.LogoutModel
+@using TrainSchedule.Services
+@inject CommonLocalizationService localizer
+@{
+    Layout = "/Pages/Admin/_Layout.cshtml";
+}
+<h3>@localizer.Get("Are you sure you want to log out?")</h3>
+<form method="post">
+    <div class="form-group">
+        <button class="btn btn-primary">@localizer.Get("Logout")</button>
+    </div>
+</form>

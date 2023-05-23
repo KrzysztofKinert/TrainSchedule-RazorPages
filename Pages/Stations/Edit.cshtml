@@ -1,0 +1,38 @@
+﻿@page
+@using TrainSchedule.Services
+@inject CommonLocalizationService localizer
+@model TrainSchedule.Pages.Stations.EditModel
+
+@{
+    Layout = "/Pages/Admin/_Layout.cshtml";
+    ViewData["Title"] = "Edit";
+}
+
+<h1>@localizer.Get("Edit")</h1>
+
+<h4>@localizer.Get("Station")</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Station.StationID" />
+            <div class="form-group">
+                <label asp-for="Station.Name" class="control-label"></label>
+                <input asp-for="Station.Name" class="form-control" />
+                <span asp-validation-for="Station.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="@localizer.Get("Save")" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">@localizer.Get("Back to list")</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

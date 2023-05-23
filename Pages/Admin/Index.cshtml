@@ -1,0 +1,9 @@
+﻿@page
+@using TrainSchedule.Services
+@inject CommonLocalizationService localizer
+@model TrainSchedule.Pages.Admin.IndexModel
+@{
+    Layout = "/Pages/Admin/_Layout.cshtml";
+}
+
+<h1>@localizer.Get("Logged in as admin")</h1>

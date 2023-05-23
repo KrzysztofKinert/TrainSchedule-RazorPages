@@ -1,0 +1,114 @@
+﻿@page "{handler?}"
+@using TrainSchedule.Services
+@inject CommonLocalizationService localizer
+@model TrainSchedule.Pages.ResultsModel
+@{
+}
+<div>
+    <h4>@localizer.Get("Search results")</h4>
+</div>
+<table class="table justify-content-xl-center" style="text-align: center">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Results[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Results[0].Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Results[0].Departure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Results[0].Arrival)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Results[0].Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Results[0].Distance)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @*<tr></tr>*@
+        @foreach (var item in Model.Results)
+        {
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-primary details" data-toggle="modal" data-target="#detailsModal" data-id="@item.ConnectionID">
+                        @localizer.Get("Connection Details")
+                    </button>
+                    <input type="hidden" name="result" id="result" value="@item" />
+                </td>
+                <td style="padding-top: 20px">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td style="padding-top: 20px">
+                    @{
+                        var typeString = "";
+                        if (item.Type == "E") typeString = "Express";
+                        else if (item.Type == "I") typeString = "Intercity";
+                        else typeString = "Regional";
+                        @localizer.Get(typeString);
+                    }
+                </td>
+                <td style="padding-top: 20px">
+                    @item.Departure.ToString("g")
+                </td>
+                <td style="padding-top: 20px">
+                    @item.Arrival.ToString("g")
+                </td>
+                <td style="padding-top: 20px">
+                    @item.Time.ToString(@"hh\:mm")
+                </td>
+                <td style="padding-top: 20px">
+                    @{
+                        var distance = item.Distance.ToString() + " km";
+                        @distance;
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <a asp-page="/Index" class="btn btn-primary btn-lg btn-block">@localizer.Get("Modify Search")</a>
+        </div>
+        <div class="col">
+            <form method="post"><button class="btn btn-primary btn-lg btn-block">@localizer.Get("New Search")</button></form>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $(function () {
+            $('button.details').on('click', function () {
+                $('.modal-body').load(`/Results/result?id=${$(this).data('id')}`);
+            });
+        })
+    </script>
+}
+
+<!-- Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            @*<div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@localizer.Get("Connection Details")</h5>
+            </div>*@
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-group-lg" data-dismiss="modal">@localizer.Get("Close")</button>
+            </div>
+        </div>
+    </div>
+</div>

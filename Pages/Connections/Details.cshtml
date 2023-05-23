@@ -1,0 +1,67 @@
+﻿@page
+@using TrainSchedule.Services
+@inject CommonLocalizationService localizer
+@model TrainSchedule.Pages.Connections.DetailsModel
+
+@{
+    Layout = "/Pages/Admin/_Layout.cshtml";
+    ViewData["Title"] = "Details";
+}
+
+<h1>@localizer.Get("Details")</h1>
+
+<div>
+    <h4>@localizer.Get("Connection")</h4>
+    <hr />
+    <ul class="list-group list-group-horizontal">
+        <li class="list-group-item">@Html.DisplayNameFor(model => model.Connection.ConnectionID): @Html.DisplayFor(model => model.Connection.ConnectionID)</li>
+        <li class="list-group-item">@Html.DisplayNameFor(model => model.Connection.Name): @Html.DisplayFor(model => model.Connection.Name)</li>
+        <li class="list-group-item">@Html.DisplayNameFor(model => model.Connection.Type): @Html.DisplayFor(model => model.Connection.Type)</li>
+        <li class="list-group-item">@Html.DisplayNameFor(model => model.Connection.IsWiFi): @Html.DisplayFor(model => model.Connection.IsWiFi)</li>
+        <li class="list-group-item">@Html.DisplayNameFor(model => model.Connection.IsBicycleCarriage): @Html.DisplayFor(model => model.Connection.IsBicycleCarriage)</li>
+    </ul>
+    <hr />
+    <h4>@localizer.Get("Stages")</h4>
+    <table class="table justify-content-center" style="text-align: center">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Connection.Stages[0].StageID)</th>
+            <th>@Html.DisplayNameFor(model => model.Connection.Stages[0].Sequence)</th>
+            <th>@Html.DisplayNameFor(model => model.Connection.Stages[0].DepartureStation)</th>
+            <th>@Html.DisplayNameFor(model => model.Connection.Stages[0].ArrivalStation)</th>
+            <th>@Html.DisplayNameFor(model => model.Connection.Stages[0].DepartureDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Connection.Stages[0].ArrivalDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Connection.Stages[0].Distance)</th>
+        </tr>
+        @foreach (var item in Model.Connection.Stages)
+        {
+        <tr>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.StageID)
+            </td>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.Sequence)
+            </td>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.DepartureStation)
+            </td>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.ArrivalStation)
+            </td>
+            <td class="align-middle">
+                @item.DepartureDate.ToString("g")
+            </td>
+            <td class="align-middle">
+                @item.ArrivalDate.ToString("g")
+            </td>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.Distance)
+            </td>
+        </tr>
+        }
+    </table>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Connection.ConnectionID">
+        @localizer.Get("Edit")</a> |
+    <a asp-page="./Index">@localizer.Get("Back to list")</a>
+</div>

@@ -1,0 +1,161 @@
+﻿@page
+@using Microsoft.AspNetCore.Localization
+@using TrainSchedule.Services
+@inject CommonLocalizationService localizer
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    var requestCultureFeature = HttpContext.Features.Get<IRequestCultureFeature>();
+    var requestCulture = requestCultureFeature.RequestCulture;
+}
+<body>
+    <div class="text-center">
+        <h3>@localizer.Get("Enter the details of the requested connections")</h3>
+    </div>
+    <hr />
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="Conditions.FromStation">@localizer.Get("From")</label>
+                    <input class="form-control" type="text" asp-for="Conditions.FromStation" placeholder="@localizer.Get("Enter the departure station")" autocomplete="off">
+                    <input type="hidden" id="hfFromStation" name="val" />
+                    <span asp-validation-for="Conditions.FromStation" data-val-required="@localizer.Get("The From field is required")" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Conditions.FromStation">@localizer.Get("To")</label>
+                    <input class="form-control" type="text" asp-for="Conditions.ToStation" placeholder=@localizer.Get("Enter the arrival station") autocomplete="off">
+                    <input type="hidden" id="hfToStation" name="val" />
+                    <span asp-validation-for="Conditions.ToStation" data-val-required="@localizer.Get("The To field is required")" class="text-danger"></span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-5">
+                        <label asp-for="Conditions.FromStation">@localizer.Get("Date")</label>
+                        <input class="form-control" type="date" asp-for="Conditions.Date" asp-format="{0:d}">
+                    </div>
+                    <div class="form-group col-md-auto">
+                        <label asp-for="Conditions.FromStation">@localizer.Get("Time")</label>
+                        <input class="form-control" type="time" asp-for="Conditions.Time" asp-format="{0:HH:mm}">
+                    </div>
+                    <div class="col" style="padding-top: 0.7rem">
+                        <div class="form-check col-md-auto">
+                            <input type="radio" asp-for="Conditions.IsDeparture" value="True" />
+                            <label asp-for="Conditions.FromStation">@localizer.Get("Departure")</label>
+                        </div>
+                        <div class="form-check col-md-auto">
+                            <input type="radio" asp-for="Conditions.IsDeparture" value="False" />
+                            <label asp-for="Conditions.FromStation">@localizer.Get("Arrival")</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>@localizer.Get("Connection types")</label>
+                    <div class="form-check">
+                        <input type="checkbox" asp-for="Conditions.IsExpress" />
+                        <label asp-for="Conditions.FromStation">@localizer.Get("Express")</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" asp-for="Conditions.IsIntercity" />
+                        <label asp-for="Conditions.FromStation">@localizer.Get("Intercity")</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" asp-for="Conditions.IsRegional" />
+                        <label asp-for="Conditions.FromStation">@localizer.Get("Regional")</label>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label>@localizer.Get("Required services")</label>
+                    <div class="form-check">
+                        <input type="checkbox" asp-for="Conditions.IsWifi" />
+                        <label asp-for="Conditions.FromStation">@localizer.Get("WiFi")</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" asp-for="Conditions.IsBicycleCarriage" />
+                        <label asp-for="Conditions.FromStation">@localizer.Get("Bicycle carriage")</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col text-center">
+            <button type="submit" style="font-size: 30px" class="btn btn-primary btn-lg btn-block">@localizer.Get("SEARCH")</button>
+        </div>
+    </form>
+    <div class="col text-center">
+        <label style="font-size: 20px">W bazie danych znajdują się przykładowe połączenia pomiędzy Opolem Głównym a Wrocławiem Głównym w dniach 04/03/2023 - 05/03/2023</label>
+    </div>
+</body>
+@section Scripts{
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
+    <link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />
+    <script type="text/javascript">
+        $(function () {
+            $("#Conditions_FromStation").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/Index?handler=AutoComplete',
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("XSRF-TOKEN",
+                                $('input:hidden[name="__RequestVerificationToken"]').val());
+                        },
+                        data: { "prefix": request.term },
+                        type: "POST",
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return item;
+                            }))
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                position: { collision: "flip" },
+                select: function (e, i) {
+                    $("#hfFromStation").val(i.item.val);
+                },
+                minLength: 1
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $("#Conditions_ToStation").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/Index?handler=AutoComplete',
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("XSRF-TOKEN",
+                                $('input:hidden[name="__RequestVerificationToken"]').val());
+                        },
+                        data: { "prefix": request.term },
+                        type: "POST",
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return item;
+                            }))
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                position: { collision: "flip" },
+                select: function (e, i) {
+                    $("#hfToStation").val(i.item.val);
+                },
+                minLength: 1
+            });
+        });
+    </script>
+}

@@ -1,0 +1,70 @@
+﻿@page
+@using TrainSchedule.Services
+@inject CommonLocalizationService localizer
+@model TrainSchedule.Pages.Stages.DeleteModel
+
+@{
+    Layout = "/Pages/Admin/_Layout.cshtml";
+    ViewData["Title"] = "Delete";
+}
+
+<h1>
+    @localizer.Get("Delete")</h1>
+
+<h3>
+    @localizer.Get("Are you sure you want to delete this?")</h3>
+<div>
+    <h4>
+        @localizer.Get("Stage")</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Stage.Sequence)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Stage.Sequence)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Stage.DepartureStation)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Stage.DepartureStation)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Stage.ArrivalStation)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Stage.ArrivalStation)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Stage.DepartureDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Stage.DepartureDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Stage.ArrivalDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Stage.ArrivalDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Stage.Distance)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Stage.Distance)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Stage.Connection)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Stage.Connection.ConnectionID)
+            </dd>
+        </dl>
+
+        <form method="post">
+            <input type="hidden" asp-for="Stage.StageID" />
+            <input type="submit" value="@localizer.Get("Delete")" class="btn btn-danger" /> |
+            <a asp-page="./Index">@localizer.Get("Back to list")</a>
+</form>
+</div>

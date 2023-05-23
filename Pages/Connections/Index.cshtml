@@ -1,0 +1,123 @@
+﻿@page
+@using TrainSchedule.Services
+@inject CommonLocalizationService localizer
+@model TrainSchedule.Pages.Connections.IndexModel
+
+@{
+    Layout = "/Pages/Admin/_Layout.cshtml";
+    ViewData["Title"] = "Index";
+}
+
+<h1>
+    @localizer.Get("Connections")
+</h1>
+
+<p>
+    <a asp-page="Create">@localizer.Get("Create a new connection")</a>
+</p>
+
+<p>
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseFilters" role="button">
+        @localizer.Get("Filters")
+        <i class="bi bi-arrow-down-square"></i>
+    </a>
+</p>
+
+<div class="collapse" id="collapseFilters">
+    <div class="card card-body">
+        <form asp-page="./Index" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    <input type="hidden" name="handler" value="Id" />
+                    <input type="text" name="Id" value="@Model.FilterId" />
+                    <input type="submit" value="@localizer.Get("Find by Id")" class="btn btn-primary" />
+                </p>
+            </div>
+        </form>
+        <form asp-page="./Index" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    <input type="hidden" name="handler" value="Name" />
+                    <input type="text" name="Name" value="@Model.FilterName" />
+                    <input type="submit" value="@localizer.Get("Find by name")" class="btn btn-primary" />
+                </p>
+            </div>
+        </form>
+        <form asp-page="./Index" method="get">
+            <div class="form-actions no-color">
+                <p>
+                    <input type="hidden" name="handler" value="Type" />
+                    <input type="text" name="Type" value="@Model.FilterType" />
+                    <input type="submit" value="@localizer.Get("Find by type")" class="btn btn-primary" />
+                </p>
+            </div>
+        </form>
+        <a asp-page="./Index">@localizer.Get("Disable filters")</a>
+    </div>
+</div>
+
+<table class="table" style="text-align: center">
+    <thead>
+        <tr>
+            <th class="text-center" style="width: 15%">
+                @Html.DisplayNameFor(model => model.Connections[0].ConnectionID)
+            </th>
+            <th class="text-center" style="width: 15%">
+                @Html.DisplayNameFor(model => model.Connections[0].Name)
+            </th>
+            <th class="text-center" style="width: 20%">
+                @Html.DisplayNameFor(model => model.Connections[0].Type)
+            </th>
+            <th class="text-center" style="width: 15%">
+                @Html.DisplayNameFor(model => model.Connections[0].IsWiFi)
+            </th>
+            <th class="text-center" style="width: 15%">
+                @Html.DisplayNameFor(model => model.Connections[0].IsBicycleCarriage)
+            </th>
+            <th style="width: 20%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Connections)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConnectionID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsWiFi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsBicycleCarriage)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ConnectionID">@localizer.Get("Edit")</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ConnectionID">@localizer.Get("Stages")</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ConnectionID">@localizer.Get("Delete")</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.Connections.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Connections.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-pageIndex="@(Model.Connections.PageIndex - 1)"
+   class="btn btn-primary @prevDisabled">
+    @localizer.Get("Previous")
+</a>
+<a asp-page="./Index"
+   asp-route-pageIndex="@(Model.Connections.PageIndex + 1)"
+   class="btn btn-primary @nextDisabled">
+    @localizer.Get("Next")
+</a>
